@@ -10,11 +10,14 @@ from owlgate_agents.gate_agent import GateAgent
 from owlgate_agents.healing_agent import HealingAgent
 from owlgate_agents.models import (
     ChangedFile,
+    GateVerdict,
     HealProposal,
     RiskAssessment,
+    RunResult,
     SuiteSpec,
     TestFailure,
 )
+from owlgate_agents.pipeline import OwlGatePipeline, ScriptedTestRunner, TestRunner
 from owlgate_agents.risk_agent import RiskAgent
 
 __all__ = [
@@ -22,11 +25,16 @@ __all__ = [
     "RiskAgent",
     "HealingAgent",
     "GateAgent",
+    "OwlGatePipeline",
+    "ScriptedTestRunner",
+    "TestRunner",
     "TestCatalogue",
     "SuiteSpec",
     "ChangedFile",
     "RiskAssessment",
     "TestFailure",
     "HealProposal",
+    "GateVerdict",
+    "RunResult",
 ]
 __version__ = "0.0.1"

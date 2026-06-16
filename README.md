@@ -61,6 +61,19 @@ print(result.to_dict())
 # {'suites': ['api/contacts'], 'score': ..., 'high_risk': ..., 'untested': [], 'rationale': '...'}
 ```
 
+### Full pipeline
+
+Run the whole gate (select → execute → heal → decide) on a change:
+
+```bash
+PYTHONPATH=src python -m owlgate_agents examples/diff.json
+```
+
+The bundled `ScriptedTestRunner` drives a deterministic demo (the real Test Cloud
+runner plugs in via the `TestRunner` protocol). The example reproduces the demo
+scenario: a fragile selector self-heals, a functional validation change is
+escalated, and the gate returns **no-go (human approval required)**.
+
 ## License
 
 [Apache 2.0](./LICENSE)

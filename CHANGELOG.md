@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and **escalates functional or ambiguous failures via `UnhealableTestError`** so a
   real regression is never masked. Adds `TestFailure` / `HealProposal` value objects
   and an 8-case test suite.
+- **GateAgent implemented** — deterministic go / no-go verdict from test results,
+  heal outcomes, and residual risk; unhealed failures block, high risk requires a
+  human sign-off. Adds the `GateVerdict` value object.
+- **OwlGatePipeline** — end-to-end orchestration (select → execute → heal → decide)
+  with an injectable `TestRunner` (`ScriptedTestRunner` for local/demo runs) and a
+  `python -m owlgate_agents` CLI that runs the full gate on a change description.
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite.
 
 ### Changed

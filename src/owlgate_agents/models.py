@@ -106,3 +106,30 @@ class HealProposal:
             "suggestion": self.suggestion,
             "suggested_locator": self.suggested_locator,
         }
+
+
+@dataclass(frozen=True)
+class RunResult:
+    """The outcome of executing a set of suites (a Test Cloud run)."""
+
+    passed: int
+    failed: int
+    failures: tuple["TestFailure", ...] = ()
+
+
+@dataclass(frozen=True)
+class GateVerdict:
+    """The release verdict — the "OwlGate pass"."""
+
+    verdict: str  # "go" | "no-go"
+    needs_human: bool
+    rationale: str
+    blocking: tuple[str, ...] = ()
+
+    def to_dict(self) -> dict:
+        return {
+            "verdict": self.verdict,
+            "needs_human": self.needs_human,
+            "rationale": self.rationale,
+            "blocking": list(self.blocking),
+        }
