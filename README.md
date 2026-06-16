@@ -1,5 +1,7 @@
 # owlgate-agents
 
+[![CI](https://github.com/RoboActPteLtd/OwlGate-Agents/actions/workflows/ci.yml/badge.svg)](https://github.com/RoboActPteLtd/OwlGate-Agents/actions/workflows/ci.yml)
+
 The agentic brain of **OwlGate** — three coded agents that reason about a change
 and decide whether it is safe to ship. Deployed as UiPath **coded agents** and
 orchestrated by [`owlgate-platform`](../owlgate-platform).

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   example input (`examples/diff.json`), and a 22-case `unittest` suite. The score
   is a transparent weighted blend (tag severity, churn, coverage gap, breadth) so
   it can be audited and overridden at the gate.
+- Minimal GitHub Actions CI — byte-compile and run the `unittest` suite.
 
 ### Changed
 
