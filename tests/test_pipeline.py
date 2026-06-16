@@ -70,7 +70,8 @@ class PipelineTests(unittest.TestCase):
             self._payload([{"path": "src/routes/+page.svelte", "lines": 1}])
         )
         self.assertEqual(
-            set(report), {"risk", "results", "healed", "escalated", "verdict"}
+            set(report),
+            {"risk", "results", "healed", "escalated", "flaky", "verdict"},
         )
 
 

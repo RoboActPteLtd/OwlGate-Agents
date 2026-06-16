@@ -12,7 +12,9 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
+from owlgate_agents.catalogue import TestCatalogue
 from owlgate_agents.errors import UnhealableTestError
+from owlgate_agents.flaky import FlakyDetector
 from owlgate_agents.gate_agent import GateAgent
 from owlgate_agents.healing_agent import HealingAgent
 from owlgate_agents.models import RunResult, TestFailure
@@ -53,14 +55,19 @@ class OwlGatePipeline:
         risk: RiskAgent | None = None,
         healing: HealingAgent | None = None,
         gate: GateAgent | None = None,
+        flaky: FlakyDetector | None = None,
     ) -> None:
         self._runner = runner
         self._risk = risk or RiskAgent()
         self._healing = healing or HealingAgent()
         self._gate = gate or GateAgent()
+        self._flaky = flaky or FlakyDetector()
 
     def run(self, payload: dict[str, Any]) -> dict[str, Any]:
-        risk = self._risk.run(payload)
+        catalogue = self._coerce_catalogue(payload.get("catalogue"))
+        risk = self._risk.run(
+            {**payload, "catalogue": catalogue} if catalogue else payload
+        )
 
         run_result = self._runner.run(list(risk.suites))
 
@@ -81,10 +88,23 @@ class OwlGatePipeline:
             }
         )
 
+        flaky = self._flaky.detect(catalogue, risk.suites) if catalogue else []
+
         return {
             "risk": risk.to_dict(),
             "results": {"passed": run_result.passed, "failed": run_result.failed},
             "healed": healed,
             "escalated": escalated,
+            "flaky": flaky,
             "verdict": verdict.to_dict(),
         }
+
+    @staticmethod
+    def _coerce_catalogue(catalogue: Any) -> TestCatalogue | None:
+        if isinstance(catalogue, TestCatalogue):
+            return catalogue
+        if isinstance(catalogue, str):
+            return TestCatalogue.from_json(catalogue)
+        if isinstance(catalogue, (list, tuple)):
+            return TestCatalogue.from_list(list(catalogue))
+        return None

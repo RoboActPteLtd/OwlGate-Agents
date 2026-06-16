@@ -6,6 +6,7 @@ All failure modes surface as typed exceptions from :mod:`owlgate_agents.errors`.
 
 from owlgate_agents.base import Agent
 from owlgate_agents.catalogue import TestCatalogue
+from owlgate_agents.flaky import FlakyDetector
 from owlgate_agents.gate_agent import GateAgent
 from owlgate_agents.healing_agent import HealingAgent
 from owlgate_agents.models import (
@@ -25,6 +26,7 @@ __all__ = [
     "RiskAgent",
     "HealingAgent",
     "GateAgent",
+    "FlakyDetector",
     "OwlGatePipeline",
     "ScriptedTestRunner",
     "TestRunner",

@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **OwlGatePipeline** — end-to-end orchestration (select → execute → heal → decide)
   with an injectable `TestRunner` (`ScriptedTestRunner` for local/demo runs) and a
   `python -m owlgate_agents` CLI that runs the full gate on a change description.
+- **FlakyDetector** — flags fragile suites from recorded flakiness (stabilize vs.
+  quarantine), surfaced as a `flaky` section in the pipeline report.
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite; gitleaks secret scan.
 
 ### Changed
