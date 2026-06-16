@@ -35,7 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Deployable UiPath coded agent** (`uipath-agent/`) — a Coded Function wrapping
   `OwlGatePipeline` (dataclass IO), packaged and **published to UiPath** via
   `uip codedagent deploy`; vendors the package for self-contained deploy and ships
-  a smoke eval set (JSON-similarity evaluator).
+  a smoke eval set (JSON-similarity evaluator). Verified by a successful
+  Orchestrator job run on the tenant (verdict `no-go`, `needs_human`).
+- **Action Center HITL escalation** — when `verdict.needs_human`, the agent raises
+  an Action Center approval task via the UiPath SDK (`sdk.tasks.create`). Gated by
+  the `OWLGATE_ESCALATE` env var so local runs/evals never create tenant tasks; the
+  deployed Shared-folder process sets it.
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite; gitleaks secret scan.
 
 ### Changed

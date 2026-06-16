@@ -4,7 +4,7 @@
     "entryPoints": [
         {
             "filePath": "main",
-            "uniqueId": "2da57663-bbad-48ab-80d8-4ff1ace0ea18",
+            "uniqueId": "0f049e18-de62-47c2-bff0-e8dbac6a90cd",
             "type": "function",
             "input": {
                 "type": "object",
@@ -45,7 +45,7 @@
             "graph": {
                 "nodes": [
                     {
-                        "id": "main.py:52",
+                        "id": "main.py:81",
                         "name": "main",
                         "type": "function",
                         "metadata": {
@@ -53,7 +53,15 @@
                         }
                     },
                     {
-                        "id": "main.py:43",
+                        "id": "main.py:57",
+                        "name": "_raise_human_gate",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:44",
                         "name": "_resolve_catalogue",
                         "type": "function",
                         "metadata": {
@@ -63,8 +71,12 @@
                 ],
                 "edges": [
                     {
-                        "source": "main.py:52",
-                        "target": "main.py:43"
+                        "source": "main.py:81",
+                        "target": "main.py:57"
+                    },
+                    {
+                        "source": "main.py:81",
+                        "target": "main.py:44"
                     }
                 ]
             }
