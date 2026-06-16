@@ -61,3 +61,48 @@ class RiskAssessment:
             "untested": list(self.untested),
             "rationale": self.rationale,
         }
+
+
+@dataclass(frozen=True)
+class TestFailure:
+    """A failed Test Cloud run, as seen by the HealingAgent."""
+
+    suite: str
+    message: str
+    locator: str | None = None
+    source: str = ""
+
+    @classmethod
+    def coerce(cls, item: "dict | TestFailure") -> "TestFailure":
+        if isinstance(item, TestFailure):
+            return item
+        if isinstance(item, dict):
+            return cls(
+                suite=item.get("suite", ""),
+                message=item.get("message", ""),
+                locator=item.get("locator"),
+                source=item.get("source", ""),
+            )
+        raise TypeError(f"cannot coerce {type(item)!r} to TestFailure")
+
+
+@dataclass(frozen=True)
+class HealProposal:
+    """A proposed fix for a non-functional test failure."""
+
+    suite: str
+    kind: str  # "selector" | "timing"
+    confidence: float
+    summary: str
+    suggestion: str
+    suggested_locator: str | None = None
+
+    def to_dict(self) -> dict:
+        return {
+            "suite": self.suite,
+            "kind": self.kind,
+            "confidence": round(self.confidence, 4),
+            "summary": self.summary,
+            "suggestion": self.suggestion,
+            "suggested_locator": self.suggested_locator,
+        }
