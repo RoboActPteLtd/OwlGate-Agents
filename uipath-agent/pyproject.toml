@@ -1,6 +1,6 @@
 [project]
 name = "owlgate-gate"
-version = "0.0.2"
+version = "0.0.6"
 description = "OwlGate release-gate as a UiPath coded agent (wraps OwlGatePipeline)."
 authors = [{ name = "Yeo Wen Qin", email = "yeo_dev@protonmail.com" }]
 dependencies = [

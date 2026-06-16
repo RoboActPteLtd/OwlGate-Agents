@@ -37,10 +37,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `uip codedagent deploy`; vendors the package for self-contained deploy and ships
   a smoke eval set (JSON-similarity evaluator). Verified by a successful
   Orchestrator job run on the tenant (verdict `no-go`, `needs_human`).
-- **Action Center HITL escalation** — when `verdict.needs_human`, the agent raises
-  an Action Center approval task via the UiPath SDK (`sdk.tasks.create`). Gated by
-  the `OWLGATE_ESCALATE` env var so local runs/evals never create tenant tasks; the
-  deployed Shared-folder process sets it.
+- **Human-gate escalation** — on `verdict.needs_human` (and `escalate` input true),
+  the agent records a human-approval request via the UiPath SDK: a **queue item** in
+  `owlgate-changes` (a human-reviewable record that needs no Actions service —
+  **verified live by a tenant job**) plus an **Action Center task** (`sdk.tasks.create`,
+  used when the tenant's Actions service is enabled). Gated by the `escalate` input
+  (env `OWLGATE_ESCALATE` also honoured); the outcome is surfaced in the output's
+  `escalation` field.
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite; gitleaks secret scan.
 
 ### Changed

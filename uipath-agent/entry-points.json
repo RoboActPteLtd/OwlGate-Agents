@@ -4,7 +4,7 @@
     "entryPoints": [
         {
             "filePath": "main",
-            "uniqueId": "0f049e18-de62-47c2-bff0-e8dbac6a90cd",
+            "uniqueId": "7f896567-af89-4247-833a-cc5e978b29a8",
             "type": "function",
             "input": {
                 "type": "object",
@@ -17,6 +17,9 @@
                     },
                     "outcomes": {
                         "type": "object"
+                    },
+                    "escalate": {
+                        "type": "boolean"
                     }
                 },
                 "required": [
@@ -32,6 +35,9 @@
                     "needs_human": {
                         "type": "boolean"
                     },
+                    "escalation": {
+                        "type": "string"
+                    },
                     "report": {
                         "type": "object"
                     }
@@ -39,13 +45,14 @@
                 "required": [
                     "verdict",
                     "needs_human",
+                    "escalation",
                     "report"
                 ]
             },
             "graph": {
                 "nodes": [
                     {
-                        "id": "main.py:81",
+                        "id": "main.py:107",
                         "name": "main",
                         "type": "function",
                         "metadata": {
@@ -53,16 +60,16 @@
                         }
                     },
                     {
-                        "id": "main.py:57",
-                        "name": "_raise_human_gate",
+                        "id": "main.py:47",
+                        "name": "_resolve_catalogue",
                         "type": "function",
                         "metadata": {
                             "file": "main.py"
                         }
                     },
                     {
-                        "id": "main.py:44",
-                        "name": "_resolve_catalogue",
+                        "id": "main.py:92",
+                        "name": "_raise_human_gate",
                         "type": "function",
                         "metadata": {
                             "file": "main.py"
@@ -71,12 +78,12 @@
                 ],
                 "edges": [
                     {
-                        "source": "main.py:81",
-                        "target": "main.py:57"
+                        "source": "main.py:107",
+                        "target": "main.py:47"
                     },
                     {
-                        "source": "main.py:81",
-                        "target": "main.py:44"
+                        "source": "main.py:107",
+                        "target": "main.py:92"
                     }
                 ]
             }

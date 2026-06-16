@@ -3,6 +3,7 @@
     { "path": "src/routes/api/contacts/+server.ts", "lines": 18 },
     { "path": "src/routes/contact/+page.svelte", "lines": 6 }
   ],
+  "escalate": true,
   "outcomes": {
     "api/contacts": {
       "suite": "api/contacts",
