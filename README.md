@@ -33,6 +33,32 @@ uip codedagent run risk --input examples/diff.json
 uip codedagent pack && uip codedagent publish
 ```
 
+### Tests
+
+The deterministic core runs with **no external dependencies** (stdlib `unittest`,
+also discoverable by `pytest`):
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests   # or: pytest
+```
+
+### RiskAgent at a glance
+
+`RiskAgent` is implemented and deterministic — selection by source-glob matching,
+risk score as a transparent weighted blend (tag severity, churn, coverage gap,
+breadth) so a human can audit and override the number at the gate.
+
+```python
+from owlgate_agents import RiskAgent
+
+result = RiskAgent().run({
+    "diff": [{"path": "src/routes/api/contacts/+server.ts", "lines": 18}],
+    "catalogue": "catalogues/sample-app.json",
+})
+print(result.to_dict())
+# {'suites': ['api/contacts'], 'score': ..., 'high_risk': ..., 'untested': [], 'rationale': '...'}
+```
+
 ## License
 
 [Apache 2.0](./LICENSE)

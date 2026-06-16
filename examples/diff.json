@@ -1,0 +1,7 @@
+{
+  "diff": [
+    { "path": "src/routes/api/contacts/+server.ts", "lines": 18 },
+    { "path": "src/routes/contact/+page.svelte", "lines": 6 }
+  ],
+  "catalogue": "catalogues/sample-app.json"
+}

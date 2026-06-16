@@ -1,0 +1,28 @@
+{
+  "suites": [
+    {
+      "id": "ui/contact-form",
+      "sources": ["src/routes/contact/**", "src/lib/Toast.svelte"],
+      "tags": ["form", "submit", "ui"],
+      "flakiness": 0.25
+    },
+    {
+      "id": "api/contacts",
+      "sources": ["src/routes/api/contacts/**"],
+      "tags": ["validation", "api"],
+      "flakiness": 0.05
+    },
+    {
+      "id": "ui/home",
+      "sources": ["src/routes/+page.svelte", "src/routes/+layout.svelte"],
+      "tags": ["ui"],
+      "flakiness": 0.0
+    },
+    {
+      "id": "api/health",
+      "sources": ["src/routes/api/health/**"],
+      "tags": ["api"],
+      "flakiness": 0.0
+    }
+  ]
+}
