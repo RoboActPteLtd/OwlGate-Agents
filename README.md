@@ -35,4 +35,4 @@ uip codedagent pack && uip codedagent publish
 
 ## License
 
-[MIT](./LICENSE)
+[Apache 2.0](./LICENSE)

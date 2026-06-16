@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "OwlGate coded agents — Risk, Self-Healing, and Gate verdict for the UiPath Test Cloud release-gate."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { text = "Apache-2.0" }
 authors = [{ name = "Yeo Wen Qin", email = "yeo_dev@protonmail.com" }]
 dependencies = [
     "langgraph>=0.2",

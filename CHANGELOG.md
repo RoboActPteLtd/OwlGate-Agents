@@ -12,3 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial scaffold of the OwlGate coded agents.
 - `Agent` base class and typed exception hierarchy (`errors.py`).
 - Stubs for `RiskAgent`, `HealingAgent`, and `GateAgent`.
+
+### Changed
+
+- Relicensed from MIT to Apache 2.0.
