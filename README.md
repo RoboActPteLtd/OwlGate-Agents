@@ -74,6 +74,12 @@ runner plugs in via the `TestRunner` protocol). The example reproduces the demo
 scenario: a fragile selector self-heals, a functional validation change is
 escalated, and the gate returns **no-go (human approval required)**.
 
+## Deploy to UiPath
+
+The [`uipath-agent/`](./uipath-agent) subproject is the **deployable UiPath coded
+agent** — a Coded Function wrapping `OwlGatePipeline`, published with
+`uip codedagent deploy`. See its README for run/eval/deploy commands.
+
 ## License
 
 [Apache 2.0](./LICENSE)

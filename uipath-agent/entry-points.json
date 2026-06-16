@@ -1,0 +1,73 @@
+{
+    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+    "$id": "entry-points.json",
+    "entryPoints": [
+        {
+            "filePath": "main",
+            "uniqueId": "2da57663-bbad-48ab-80d8-4ff1ace0ea18",
+            "type": "function",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "diff": {
+                        "type": "object"
+                    },
+                    "catalogue": {
+                        "type": "object"
+                    },
+                    "outcomes": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "diff"
+                ]
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "verdict": {
+                        "type": "string"
+                    },
+                    "needs_human": {
+                        "type": "boolean"
+                    },
+                    "report": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "verdict",
+                    "needs_human",
+                    "report"
+                ]
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main.py:52",
+                        "name": "main",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:43",
+                        "name": "_resolve_catalogue",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main.py:52",
+                        "target": "main.py:43"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "id": "smoke-test",
+  "name": "Smoke Test",
+  "evaluatorRefs": ["OutputSimilarity"],
+  "evaluations": [
+    {
+      "id": "nogo-validation-change",
+      "name": "Validation change escalates to no-go (human approval)",
+      "inputs": {
+        "diff": [
+          { "path": "src/routes/api/contacts/+server.ts", "lines": 18 }
+        ],
+        "outcomes": {
+          "api/contacts": {
+            "suite": "api/contacts",
+            "message": "expected status 201 but received status 400"
+          }
+        }
+      },
+      "evaluationCriterias": {
+        "OutputSimilarity": {
+          "expectedOutput": { "verdict": "no-go", "needs_human": true }
+        }
+      }
+    },
+    {
+      "id": "go-clean-change",
+      "name": "Clean change passes the gate",
+      "inputs": {
+        "diff": [{ "path": "src/routes/+page.svelte", "lines": 3 }]
+      },
+      "evaluationCriterias": {
+        "OutputSimilarity": {
+          "expectedOutput": { "verdict": "go", "needs_human": false }
+        }
+      }
+    }
+  ]
+}

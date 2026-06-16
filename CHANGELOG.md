@@ -32,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `python -m owlgate_agents` CLI that runs the full gate on a change description.
 - **FlakyDetector** — flags fragile suites from recorded flakiness (stabilize vs.
   quarantine), surfaced as a `flaky` section in the pipeline report.
+- **Deployable UiPath coded agent** (`uipath-agent/`) — a Coded Function wrapping
+  `OwlGatePipeline` (dataclass IO), packaged and **published to UiPath** via
+  `uip codedagent deploy`; vendors the package for self-contained deploy and ships
+  a smoke eval set (JSON-similarity evaluator).
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite; gitleaks secret scan.
 
 ### Changed

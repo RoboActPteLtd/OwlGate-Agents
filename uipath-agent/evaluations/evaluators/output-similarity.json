@@ -1,0 +1,8 @@
+{
+  "version": "1.0",
+  "id": "OutputSimilarity",
+  "evaluatorTypeId": "uipath-json-similarity",
+  "evaluatorConfig": {
+    "name": "OutputSimilarity"
+  }
+}

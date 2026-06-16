@@ -1,0 +1,6 @@
+{
+  "ProjectType": "Function",
+  "Name": "owlgate-gate",
+  "Description": "OwlGate release-gate as a UiPath coded agent (wraps OwlGatePipeline).",
+  "MainFile": null
+}

@@ -1,0 +1,18 @@
+{
+  "diff": [
+    { "path": "src/routes/api/contacts/+server.ts", "lines": 18 },
+    { "path": "src/routes/contact/+page.svelte", "lines": 6 }
+  ],
+  "outcomes": {
+    "api/contacts": {
+      "suite": "api/contacts",
+      "message": "expected status 201 but received status 400 (validation)"
+    },
+    "ui/contact-form": {
+      "suite": "ui/contact-form",
+      "message": "locator '.toast-success > span' resolved to 0 elements",
+      "locator": ".toast-success > span",
+      "source": "<div role=\"status\"><span>{message}</span></div>"
+    }
+  }
+}
