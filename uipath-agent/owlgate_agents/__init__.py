@@ -13,6 +13,7 @@ from owlgate_agents.models import (
     ChangedFile,
     GateVerdict,
     HealProposal,
+    Hunk,
     RiskAssessment,
     RunResult,
     SuiteSpec,
@@ -20,6 +21,11 @@ from owlgate_agents.models import (
 )
 from owlgate_agents.pipeline import OwlGatePipeline, ScriptedTestRunner, TestRunner
 from owlgate_agents.risk_agent import RiskAgent
+from owlgate_agents.testcloud import (
+    OrchestratorTestExecutor,
+    TestCloudRunner,
+    TestExecutor,
+)
 
 __all__ = [
     "Agent",
@@ -30,6 +36,9 @@ __all__ = [
     "OwlGatePipeline",
     "ScriptedTestRunner",
     "TestRunner",
+    "TestCloudRunner",
+    "TestExecutor",
+    "OrchestratorTestExecutor",
     "TestCatalogue",
     "SuiteSpec",
     "ChangedFile",
@@ -38,5 +47,6 @@ __all__ = [
     "HealProposal",
     "GateVerdict",
     "RunResult",
+    "Hunk",
 ]
 __version__ = "0.0.1"

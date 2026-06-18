@@ -80,7 +80,29 @@ class RiskAgent(Agent):
             rationale=self._explain(
                 impacted, untested, tag_risk, breadth, churn, gap_ratio, score
             ),
+            review_targets=self._review_targets(impacted, files, catalogue),
         )
+
+    @staticmethod
+    def _review_targets(impacted, files, catalogue) -> tuple[dict, ...]:
+        """The exact code to review: each changed hunk inside an impacted suite,
+        as ``{file, function, lines}`` — so the gate can name the function, not just
+        the file. Empty when the diff carried no hunk detail."""
+        targets: list[dict] = []
+        for f in files:
+            if not f.hunks:
+                continue
+            if not any(catalogue.covers(s, f.path) for s in impacted):
+                continue
+            for h in f.hunks:
+                targets.append(
+                    {
+                        "file": f.path,
+                        "function": h.function or "(top level)",
+                        "lines": h.line_range,
+                    }
+                )
+        return tuple(targets)
 
     # -- input parsing -----------------------------------------------------
 
