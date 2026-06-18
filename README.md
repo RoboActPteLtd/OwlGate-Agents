@@ -74,6 +74,25 @@ runner plugs in via the `TestRunner` protocol). The example reproduces the demo
 scenario: a fragile selector self-heals, a functional validation change is
 escalated, and the gate returns **no-go (human approval required)**.
 
+## Real Test Cloud execution (TestCloudRunner)
+
+`ScriptedTestRunner` drives local/demo runs. `TestCloudRunner` is the real runner:
+it executes a UiPath Test Cloud **test set** and maps per-test-case results to
+suites. The HTTP is behind a `TestExecutor` seam (unit-tested without a tenant).
+
+To activate (currently *not* wired into the deployed agent):
+
+1. Make the OwlGate test set's cases **automated** in Test Cloud (so they emit real
+   pass/fail).
+2. In `uipath-agent/main.py`, build the pipeline with the real runner:
+
+   ```python
+   from owlgate_agents import OwlGatePipeline, TestCloudRunner, OrchestratorTestExecutor
+   runner = TestCloudRunner(OrchestratorTestExecutor(), "OwlGate smoke", SUITE_TO_CASES)
+   report = OwlGatePipeline(runner).run({"diff": input.diff, "catalogue": ...})
+   ```
+3. Re-vendor the package and redeploy (then update the CI gate's release key).
+
 ## Deploy to UiPath
 
 The [`uipath-agent/`](./uipath-agent) subproject is the **deployable UiPath coded

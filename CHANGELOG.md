@@ -32,6 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `python -m owlgate_agents` CLI that runs the full gate on a change description.
 - **FlakyDetector** — flags fragile suites from recorded flakiness (stabilize vs.
   quarantine), surfaced as a `flaky` section in the pipeline report.
+- **TestCloudRunner** — the real `TestRunner` that executes a UiPath Test Cloud test
+  set (Orchestrator Test Automation API, stdlib `urllib`) and maps per-test-case
+  results to suites. The HTTP sits behind a `TestExecutor` seam so the run/mapping
+  logic is unit-tested (6 cases) without a tenant. Not wired into the deployed agent
+  yet — activation needs automated test cases in Test Cloud + a redeploy (replaces
+  `ScriptedTestRunner` in `main.py`).
 - **Deployable UiPath coded agent** (`uipath-agent/`) — a Coded Function wrapping
   `OwlGatePipeline` (dataclass IO), packaged and **published to UiPath** via
   `uip codedagent deploy`; vendors the package for self-contained deploy and ships
