@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `python -m owlgate_agents` CLI that runs the full gate on a change description.
 - **FlakyDetector** — flags fragile suites from recorded flakiness (stabilize vs.
   quarantine), surfaced as a `flaky` section in the pipeline report.
+- **Line/function-level review targets** — `ChangedFile` now carries optional `Hunk`s
+  (function + line range from diff hunk headers), and `RiskAgent` emits
+  `review_targets` (`[{file, function, lines}]`) for the changed code inside impacted
+  suites. The verdict can now name the **exact function + lines** to review, not just
+  the file. Backward-compatible (empty when no hunks are sent).
 - **TestCloudRunner** — the real `TestRunner` that executes a UiPath Test Cloud test
   set (Orchestrator Test Automation API, stdlib `urllib`) and maps per-test-case
   results to suites. The HTTP sits behind a `TestExecutor` seam so the run/mapping

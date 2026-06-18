@@ -88,7 +88,8 @@ class RiskAgentScoringTests(unittest.TestCase):
         r = self._run([{"path": "src/routes/api/contacts/+server.ts", "lines": 18}])
         d = r.to_dict()
         self.assertEqual(
-            set(d), {"suites", "score", "high_risk", "untested", "rationale"}
+            set(d),
+            {"suites", "score", "high_risk", "untested", "rationale", "review_targets"},
         )
         self.assertIsInstance(d["suites"], list)
 

@@ -13,6 +13,7 @@ from owlgate_agents.models import (
     ChangedFile,
     GateVerdict,
     HealProposal,
+    Hunk,
     RiskAssessment,
     RunResult,
     SuiteSpec,
@@ -46,5 +47,6 @@ __all__ = [
     "HealProposal",
     "GateVerdict",
     "RunResult",
+    "Hunk",
 ]
 __version__ = "0.0.1"
