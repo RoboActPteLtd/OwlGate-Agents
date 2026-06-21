@@ -54,16 +54,24 @@ class TestCatalogue:
 
     @classmethod
     def from_list(cls, data: Iterable[dict]) -> "TestCatalogue":
-        """Build from a list of plain dicts (e.g. parsed JSON)."""
-        suites = [
-            SuiteSpec(
-                id=d["id"],
-                sources=tuple(d.get("sources", ())),
-                tags=tuple(d.get("tags", ())),
-                flakiness=float(d.get("flakiness", 0.0)),
-            )
-            for d in data
-        ]
+        """Build from a list of plain dicts (e.g. parsed JSON).
+
+        A dict missing the required ``id`` (or otherwise malformed) is reported as
+        an unusable catalogue, not a bare ``KeyError`` — callers handle the typed
+        :class:`RiskAssessmentError`.
+        """
+        try:
+            suites = [
+                SuiteSpec(
+                    id=d["id"],
+                    sources=tuple(d.get("sources", ())),
+                    tags=tuple(d.get("tags", ())),
+                    flakiness=float(d.get("flakiness", 0.0)),
+                )
+                for d in data
+            ]
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RiskAssessmentError(f"malformed catalogue suite: {exc}") from exc
         return cls(suites)
 
     @classmethod
@@ -81,7 +89,14 @@ class TestCatalogue:
             parsed = json.loads(text)
         except json.JSONDecodeError as exc:
             raise RiskAssessmentError(f"invalid catalogue JSON: {exc}") from exc
-        data = parsed["suites"] if isinstance(parsed, dict) else parsed
+        if isinstance(parsed, dict):
+            if "suites" not in parsed:
+                raise RiskAssessmentError(
+                    "catalogue JSON object must have a 'suites' key"
+                )
+            data = parsed["suites"]
+        else:
+            data = parsed
         return cls.from_list(data)
 
     # -- queries -----------------------------------------------------------

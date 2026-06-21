@@ -39,6 +39,17 @@ class CatalogueConstructionTests(unittest.TestCase):
         with self.assertRaises(RiskAssessmentError):
             TestCatalogue.from_json("{ not valid json ]")
 
+    def test_from_list_missing_id_raises(self) -> None:
+        # A suite dict without the required "id" is an unusable catalogue, not a
+        # bare KeyError leaking out of construction.
+        with self.assertRaises(RiskAssessmentError):
+            TestCatalogue.from_list([{"sources": ["x/**"]}])
+
+    def test_from_json_object_without_suites_raises(self) -> None:
+        # A JSON object that is not the documented {"suites": [...]} shape.
+        with self.assertRaises(RiskAssessmentError):
+            TestCatalogue.from_json('{"not_suites": []}')
+
 
 class CatalogueQueryTests(unittest.TestCase):
     def setUp(self) -> None:

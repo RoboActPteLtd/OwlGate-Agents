@@ -57,6 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `escalation` field.
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite; gitleaks secret scan.
 
+### Fixed
+
+- `TestCatalogue.from_list` / `from_json` now raise the typed `RiskAssessmentError`
+  for a malformed catalogue (a suite dict missing `id`, or a JSON object without a
+  `suites` key) instead of leaking a bare `KeyError`, so callers can handle the one
+  documented failure type.
+
 ### Changed
 
 - Relicensed from MIT to Apache 2.0.
