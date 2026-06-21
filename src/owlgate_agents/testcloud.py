@@ -137,14 +137,23 @@ class OrchestratorTestExecutor:
         )
         ex_id = started.get("value") or started.get("Id")
 
+        terminal = ("Passed", "Failed", "Cancelled", "Error")
         detail: dict = {}
         for _ in range(self._max):
             detail = self._req(
                 "GET", f"/odata/TestSetExecutions({ex_id})", {"$expand": "TestCaseExecutions"}
             )
-            if detail.get("Status") in ("Passed", "Failed", "Cancelled", "Error"):
+            if detail.get("Status") in terminal:
                 break
             time.sleep(self._poll)
+        else:
+            # Never reached a terminal state. Fail closed: returning the partial
+            # (possibly empty) result here would be read as "no case failed" and
+            # let an unfinished run pass the gate.
+            raise RuntimeError(
+                f"test set {test_set!r} did not finish after {self._max} polls "
+                f"(last status {detail.get('Status')!r})"
+            )
 
         return {
             (tce.get("Name") or str(tce.get("TestCaseId"))): str(tce.get("Status", ""))

@@ -116,6 +116,21 @@ class OrchestratorTestExecutorTests(unittest.TestCase):
         ex.run_test_set("OwlGate smoke")
         self.assertEqual(self._filter_for(ex), "Name eq 'OwlGate smoke'")
 
+    @mock.patch("owlgate_agents.testcloud.time.sleep", return_value=None)
+    def test_non_terminal_status_eventually_raises(self, _sleep) -> None:
+        # The execution never reaches a terminal state within max_polls. The
+        # executor must NOT return (possibly empty) partial results as if the run
+        # finished — that would let an unfinished run pass the gate. Fail closed.
+        ex = RecordingExecutor(status_sequence=(), max_polls=3, poll_seconds=0)
+        with self.assertRaises(RuntimeError):
+            ex.run_test_set("OwlGate smoke")
+
+    @mock.patch("owlgate_agents.testcloud.time.sleep", return_value=None)
+    def test_terminal_status_returns_case_statuses(self, _sleep) -> None:
+        ex = RecordingExecutor(status_sequence=("Running", "Passed"), poll_seconds=0)
+        result = ex.run_test_set("OwlGate smoke")
+        self.assertEqual(result, {"TC_A": "Passed"})
+
 
 if __name__ == "__main__":
     unittest.main()

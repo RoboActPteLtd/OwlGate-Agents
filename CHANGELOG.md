@@ -65,6 +65,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `OrchestratorTestExecutor` now **fails closed** when a test-set execution never
+  reaches a terminal state within `max_polls`: it raises `RuntimeError` instead of
+  returning the partial (possibly empty) result, which would have been read as "no
+  case failed" and let an unfinished run pass the gate.
 - `TestCatalogue.from_list` / `from_json` now raise the typed `RiskAssessmentError`
   for a malformed catalogue (a suite dict missing `id`, or a JSON object without a
   `suites` key) instead of leaking a bare `KeyError`, so callers can handle the one
