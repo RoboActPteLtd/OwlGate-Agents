@@ -57,6 +57,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `escalation` field.
 - Minimal GitHub Actions CI — byte-compile and run the `unittest` suite; gitleaks secret scan.
 
+### Security
+
+- `OrchestratorTestExecutor` now escapes the test-set name as a proper OData string
+  literal (single quotes doubled) before interpolating it into the `$filter`, so a
+  name containing `'` can no longer break out of the quoted filter (OData injection).
+
 ### Fixed
 
 - `TestCatalogue.from_list` / `from_json` now raise the typed `RiskAssessmentError`

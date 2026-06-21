@@ -112,8 +112,19 @@ class OrchestratorTestExecutor:
         with urllib.request.urlopen(req) as resp:  # noqa: S310 — UiPath base URL
             return json.loads(resp.read() or b"{}")
 
+    @staticmethod
+    def _odata_literal(value: str) -> str:
+        """Quote a string as an OData string literal, escaping embedded single
+        quotes by doubling them so a name like ``O'Brien`` cannot break out of the
+        filter and inject OData. See OData ABNF: a single quote is escaped as ``''``."""
+        return "'" + str(value).replace("'", "''") + "'"
+
     def run_test_set(self, test_set: str) -> dict[str, str]:
-        found = self._req("GET", "/odata/TestSets", {"$filter": f"Name eq '{test_set}'"})
+        found = self._req(
+            "GET",
+            "/odata/TestSets",
+            {"$filter": f"Name eq {self._odata_literal(test_set)}"},
+        )
         items = found.get("value", [])
         if not items:
             raise RuntimeError(f"test set {test_set!r} not found")

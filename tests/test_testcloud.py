@@ -6,9 +6,11 @@ The HTTP executor is faked, so these verify the run/mapping without a tenant.
 from __future__ import annotations
 
 import unittest
+from unittest import mock
 
 from owlgate_agents import TestCloudRunner
 from owlgate_agents.models import RunResult
+from owlgate_agents.testcloud import OrchestratorTestExecutor
 
 
 class FakeExecutor:
@@ -69,6 +71,50 @@ class TestCloudRunnerTests(unittest.TestCase):
         ex = FakeExecutor({})
         TestCloudRunner(ex, "OwlGate smoke", SUITE_MAP).run(["api/health"])
         self.assertEqual(ex.ran, "OwlGate smoke")
+
+
+class RecordingExecutor(OrchestratorTestExecutor):
+    """An OrchestratorTestExecutor whose HTTP `_req` is replaced by a scripted
+    responder, so the URL/query building and polling logic can be tested with no
+    tenant. ``status_sequence`` is the Status returned by successive execution
+    polls (defaults to a single terminal "Passed")."""
+
+    def __init__(self, status_sequence=("Passed",), **kw):
+        super().__init__(base="https://tenant.example/acct/ten", token="t", **kw)
+        self.calls: list[tuple[str, str, dict | None]] = []
+        self._statuses = list(status_sequence)
+
+    def _req(self, method, path, query=None, body=None):
+        self.calls.append((method, path, query))
+        if path == "/odata/TestSets":
+            return {"value": [{"Id": 7}]}
+        if "StartTestSetExecution" in path:
+            return {"value": 99}
+        if path.startswith("/odata/TestSetExecutions("):
+            status = self._statuses.pop(0) if self._statuses else "Running"
+            return {
+                "Status": status,
+                "TestCaseExecutions": [{"Name": "TC_A", "Status": "Passed"}],
+            }
+        return {}
+
+
+class OrchestratorTestExecutorTests(unittest.TestCase):
+    def _filter_for(self, executor: RecordingExecutor) -> str:
+        get = next(c for c in executor.calls if c[1] == "/odata/TestSets")
+        return get[2]["$filter"]
+
+    def test_test_set_name_with_quote_is_escaped(self) -> None:
+        # A single quote in the name must be doubled per OData literal rules, so it
+        # cannot break out of the quoted filter (injection).
+        ex = RecordingExecutor()
+        ex.run_test_set("O'Brien smoke")
+        self.assertEqual(self._filter_for(ex), "Name eq 'O''Brien smoke'")
+
+    def test_plain_name_is_unquoted_normally(self) -> None:
+        ex = RecordingExecutor()
+        ex.run_test_set("OwlGate smoke")
+        self.assertEqual(self._filter_for(ex), "Name eq 'OwlGate smoke'")
 
 
 if __name__ == "__main__":
