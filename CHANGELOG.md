@@ -65,6 +65,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `TestCloudRunner` now **fails closed** per mapped case: a selected suite passes
+  only when every one of its mapped test cases explicitly passed. Previously a
+  mapped case that did not report a status (did not run, errored, or was cancelled)
+  was not counted as a failure, so the suite passed on missing results. A suite with
+  no mapping at all is still treated as a config gap and counted as passed.
 - `OrchestratorTestExecutor` now **fails closed** when a test-set execution never
   reaches a terminal state within `max_polls`: it raises `RuntimeError` instead of
   returning the partial (possibly empty) result, which would have been read as "no

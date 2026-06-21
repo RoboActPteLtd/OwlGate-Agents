@@ -41,7 +41,11 @@ class TestCloudRunner:
     """A ``TestRunner`` backed by a Test Cloud executor + a suite→test-case map.
 
     ``suite_to_cases`` maps each catalogue suite id to the Test Manager test case
-    name(s) that cover it. A selected suite fails if any of its cases failed.
+    name(s) that cover it. A mapped suite passes only when **every** one of its
+    cases explicitly passed; a case that failed, errored, or did not report a
+    status (did not run) fails the suite. This fails closed: an un-run case is
+    never read as a pass by the gate. A suite with no mapping at all is treated as
+    a config gap (nothing ran) and counted as passed.
     """
 
     def __init__(
@@ -62,16 +66,19 @@ class TestCloudRunner:
         failures: list[TestFailure] = []
         for suite in suites:
             cases = self._map.get(suite, ())
-            failed = [c for c in cases if statuses.get(c) == "failed"]
-            if failed:
+            if not cases:
+                # No mapping for this suite — a config gap; nothing ran for it.
+                passed += 1
+                continue
+            not_passed = [c for c in cases if statuses.get(c) != "passed"]
+            if not_passed:
                 failures.append(
                     TestFailure(
                         suite=suite,
-                        message=f"Test Cloud: {', '.join(failed)} failed",
+                        message=f"Test Cloud: {', '.join(not_passed)} did not pass",
                     )
                 )
             else:
-                # No mapped case failed (passed, or no mapping → nothing ran).
                 passed += 1
         return RunResult(passed=passed, failed=len(failures), failures=tuple(failures))
 

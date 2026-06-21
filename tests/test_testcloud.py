@@ -57,10 +57,27 @@ class TestCloudRunnerTests(unittest.TestCase):
         self.assertEqual(res.failed, 1)
 
     def test_only_selected_suites_are_considered(self) -> None:
-        # api/contacts failed, but it isn't selected -> not reported.
-        res = self._runner({"TC_ContactsValidation": "Failed"}).run(["ui/contact-form"])
+        # api/contacts failed, but it isn't selected -> not reported. The selected
+        # suite's own mapped case passed.
+        res = self._runner(
+            {"TC_ContactForm": "Passed", "TC_ContactsValidation": "Failed"}
+        ).run(["ui/contact-form"])
         self.assertEqual(res.failed, 0)
         self.assertEqual(res.passed, 1)
+
+    def test_mapped_case_with_no_status_fails_closed(self) -> None:
+        # ui/contact-form is selected and mapped to TC_ContactForm, but the
+        # executor reported no status for it (it did not run). An un-run case must
+        # not be treated as a pass by a release gate.
+        res = self._runner({}).run(["ui/contact-form"])
+        self.assertEqual(res.passed, 0)
+        self.assertEqual(res.failed, 1)
+        self.assertEqual(res.failures[0].suite, "ui/contact-form")
+
+    def test_mapped_case_with_non_pass_status_fails_closed(self) -> None:
+        # A terminal-but-not-passed status (e.g. errored / cancelled) is not a pass.
+        res = self._runner({"TC_ContactForm": "Error"}).run(["ui/contact-form"])
+        self.assertEqual(res.failed, 1)
 
     def test_unmapped_suite_counts_as_passed(self) -> None:
         res = self._runner({}).run(["ui/unknown-suite"])
